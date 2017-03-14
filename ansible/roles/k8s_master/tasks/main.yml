@@ -1,0 +1,25 @@
+---
+
+- name: kube-apiserver manifest
+  template: src="kube-apiserver.json.j2" dest={{ manifests_config_dir }}
+  register: apiserver
+
+- name: kube-controller-manager manifest
+  template: src="kube-controller-manager.json.j2" dest={{ manifests_config_dir }}
+  register: controller-manager
+
+- name: kube-scheduler manifest
+  template: src="kube-scheduler.json.j2" dest={{ manifests_config_dir }}
+  register: kube-scheduler
+
+- name: admin.conf file
+  template: src="admin.conf.j2" dest={{ kubernetes_config_dir }}
+  register: admin.conf
+
+- name: kubelet.conf file
+  template: src="kubelet.conf.j2" dest={{ kubernetes_config_dir }}
+  register: kubelet.conf
+
+- name: reload kubelet service
+  when: openssl_cert|changed or kubelet.conf|changed
+  service: name=kubelet state=restarted

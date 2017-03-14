@@ -1,0 +1,15 @@
+kubernetes_service_ip: 10.96.0.1
+service_ip_range: 10.96.0.0/12
+account_key: /etc/kubernetes/pki/apiserver-key.pem
+ca_cert: /etc/kubernetes/pki/ca.pem
+api_cert: /etc/kubernetes/pki/apiserver.pem
+api_key: /etc/kubernetes/pki/apiserver-key.pem
+admin_key: /etc/kubernetes/pki/admin-key.pem
+admin_cert: /etc/kubernetes/pki/admin.pem
+api_secure_port: 6443
+lb_ip: groups['loadbalancer'][0]
+apiserver_image: gcr.io/google_containers/kube-apiserver-amd64:v1.5.2
+controller_manager_image: gcr.io/google_containers/kube-controller-manager-amd64:v1.5.2
+scheduler_image: gcr.io/google_containers/kube-scheduler-amd64:v1.5.2
+manifest_config_dir: /etc/kubernetes/manifests
+kubernetes_config_dir: /etc/kubernetes

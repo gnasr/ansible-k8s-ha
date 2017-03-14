@@ -42,3 +42,10 @@
     - kubelet
     - kubectl
     - kubernetes-cni
+
+- name: Enable kubelet
+  service: name=kubelet enabled=yes state=started
+
+- name: Create manifests directory
+  file: path={{ manifest_config_dir }} state=directory
+  register: manifest
