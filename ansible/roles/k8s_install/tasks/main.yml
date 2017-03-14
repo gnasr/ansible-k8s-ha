@@ -1,0 +1,44 @@
+---
+
+- name: Disable firewall
+  service: name=firewalld enabled=no state=stoped
+
+- name: Disable selinux
+  selinux:
+    state: disabled
+
+- name: Add docker Centos 7 repository
+  when: ansible_os_family == "RedHat"
+  yum_repository:
+    name: docker
+    description: Docker repository
+    baseurl: https://yum.dockerproject.org/repo/main/centos/7/
+    gpgkey: https://yum.dockerproject.org/gpg
+
+- name: Install docker
+  when: ansible_os_family == "RedHat"
+  yum:
+    name: docker-engine
+    state: latest
+    update_cache: yes
+
+- name: Add kubernetes yum repository
+  when: ansible_os_family == "RedHat"
+  yum_repository:
+    name: kubernetes
+    description: Kubernetes repository
+    baseurl: http://yum.kubernetes.io/repos/kubernetes-el7-x86_6
+    gpgkey:
+      - https://packages.cloud.google.com/yum/doc/yum-key.gpg
+      - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+
+- name: Install kubernetes packages
+  when: ansible_os_family == "RedHat"
+  yum:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  with_items:
+    - kubelet
+    - kubectl
+    - kubernetes-cni
